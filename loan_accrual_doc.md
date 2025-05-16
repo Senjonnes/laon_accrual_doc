@@ -35,7 +35,7 @@ The service accept the request and send the request to apache camel:
    - update loan with LastSuccessfulEodDate
    - save to journal posting
    - update lm_loan_repayment_schedule with accrual amount
-
+```mermaid
 flowchart TD
     A[Log activity started]
     B[Get fiscal period from fiscal service]
@@ -63,6 +63,7 @@ flowchart TD
     I --> J
     J --> K
     K --> L
+```
 
 
 5. **runPenalAccrual**:
