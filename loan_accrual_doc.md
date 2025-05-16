@@ -76,10 +76,10 @@ flowchart TD
    - update loan with LastSuccessfulEodPenalDate
    - update lm_loan_repayment_schedule with penalty accrual amount
   ```mermaid
- flowchart TD
+flowchart TD
     A[Get fiscal period from fiscal service]
     B{Fiscal period not null?}
-    C[Fetch loans  and repayment schedules <where grace period < COB date]
+    C[Fetch loans  and repayment schedules < where grace period < COB date]
     D{Total accrual amount ≠ 0?}
     E{AccrualAmount not null AND LastSuccessfulEodScheduleId & LastSuccessfulEodDate ≤ COB date?}
     F[Save details to lm_eod_penalty_record]
