@@ -75,7 +75,32 @@ flowchart TD
    - save to journal posting
    - update loan with LastSuccessfulEodPenalDate
    - update lm_loan_repayment_schedule with penalty accrual amount
+  ```mermaid
+ flowchart TD
+    A[Get fiscal period from fiscal service]
+    B{Fiscal period not null?}
+    C[Fetch loans  and repayment schedules <where grace period < COB date]
+    D{Total accrual amount ≠ 0?}
+    E{AccrualAmount not null AND LastSuccessfulEodScheduleId & LastSuccessfulEodDate ≤ COB date?}
+    F[Save details to lm_eod_penalty_record]
+    G[Save to journal posting]
+    H[Update loan with LastSuccessfulEodPenaltyDate]
+    I[Update lm_loan_repayment_schedule with penalty accrual amount]
+    J[End]
 
+    A --> B
+    B -- Yes --> C
+    B -- No --> J
+    C --> D
+    D -- Yes --> E
+    D -- No --> J
+    E -- Yes --> F
+    E -- No --> J
+    F --> G
+    G --> H
+    H --> I
+    I --> J
+```
 
 6. **closePaidOfLoan** 
    - fetch loan where status is Disbussed and lm_loan_repayment_schedule all schedule are PAID
@@ -92,12 +117,10 @@ flowchart TD
    - run performance classification based on the set data on lm_performance_configuration
 
 
-10. **updateRepaymentScheduleStatusToLate**:
+9. **updateRepaymentScheduleStatusToLate**:
  
-11. **updateLoanToExpired**:
+10. **updateLoanToExpired**:
 
 
 
-12. **Exception Handling**: Catches exceptions, logs audit information for failures, and rethrows the exception
-
-## Detailed Flow Diagram
+11. **Exception Handling**: Catches exceptions, logs audit information for failures, and rethrows the exception
