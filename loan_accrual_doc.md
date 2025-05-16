@@ -40,14 +40,14 @@ flowchart TD
     A[Log activity started]
     B[Get fiscal period from fiscal service]
     C{Fiscal period not null?}
-    D[Fetch loans<br/>(DISBURSED, EXPIRED)]
-    E[Fetch repayment schedules<br/>(DUE, LATE, PARTIALLY_PAID)]
-    F{AccrualAmount not null<br/>AND LastSuccessfulEodScheduleId &<br/>LastSuccessfulEodDate ≤ COB date?}
+    D[Fetch loans (DISBURSED, EXPIRED)]
+    E[Fetch repayment schedules (DUE, LATE, PARTIALLY_PAID)]
+    F{AccrualAmount not null AND LastSuccessfulEodScheduleId & LastSuccessfulEodDate ≤ COB date?}
     G[Calculate accrual amount]
     H[Save detail to lm_eod_accrual_record]
     I[Update loan with LastSuccessfulEodDate]
     J[Save to journal posting]
-    K[Update lm_loan_repayment_schedule<br/>with accrual amount]
+    K[Update lm_loan_repayment_schedule with accrual amount]
     L[End or error]
 
     A --> B
