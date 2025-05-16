@@ -36,6 +36,35 @@ The service accept the request and send the request to apache camel:
    - save to journal posting
    - update lm_loan_repayment_schedule with accrual amount
 
+flowchart TD
+    A[Log activity started]
+    B[Get fiscal period from fiscal service]
+    C{Fiscal period not null?}
+    D[Fetch loans<br/>(DISBURSED, EXPIRED)]
+    E[Fetch repayment schedules<br/>(DUE, LATE, PARTIALLY_PAID)]
+    F{AccrualAmount not null<br/>AND LastSuccessfulEodScheduleId &<br/>LastSuccessfulEodDate ≤ COB date?}
+    G[Calculate accrual amount]
+    H[Save detail to lm_eod_accrual_record]
+    I[Update loan with LastSuccessfulEodDate]
+    J[Save to journal posting]
+    K[Update lm_loan_repayment_schedule<br/>with accrual amount]
+    L[End or error]
+
+    A --> B
+    B --> C
+    C -- Yes --> D
+    C -- No --> L
+    D --> E
+    E --> F
+    F -- Yes --> G
+    F -- No --> L
+    G --> H
+    H --> I
+    I --> J
+    J --> K
+    K --> L
+
+
 5. **runPenalAccrual**:
    - get fiscal peroid from  fiscal service and check if fiscal peroid is not null
    - fetch loan where is DISBURSED, EXPIRED , lm_loan_repayment_schedule where DUE, LATE, PARTIALLY_PAID and grace period is less than the cobDate
@@ -47,7 +76,7 @@ The service accept the request and send the request to apache camel:
    - update lm_loan_repayment_schedule with penalty accrual amount
 
 
-6. **closePaidOfLoan** (Individual service only):
+6. **closePaidOfLoan** 
    - fetch loan where status is Disbussed and lm_loan_repayment_schedule all schedule are PAID
    - Make api to call to close loan on account on customer acccount,
    - set the loan to close
@@ -57,11 +86,14 @@ The service accept the request and send the request to apache camel:
    - updatate the recored to success 
 
 8. **runLoanPerformanceScheduler**:
+   - fetch loan with status as  DISBURSED,
+   - fetch lm_loan_repayment_schedule with loan id
+   - run performance classification based on the set data on lm_performance_configuration
 
 
-9. **updateRepaymentScheduleStatusToLate**:
+10. **updateRepaymentScheduleStatusToLate**:
  
-10. **updateLoanToExpired**:
+11. **updateLoanToExpired**:
 
 
 
